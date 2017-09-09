@@ -2,7 +2,7 @@ var app = angular.module('app', ['ngTouch', 'ui.grid']);
 
 app.controller('MainCtrl', ['$scope', 'i18nService', '$http', function ($scope, i18nService, $http) {
   $scope.langs = i18nService.getAllLangs();
-  $scope.lang = 'nl';
+  $scope.lang = 'zh-cn';
 
   $scope.gridOptions = {
     columnDefs: [
