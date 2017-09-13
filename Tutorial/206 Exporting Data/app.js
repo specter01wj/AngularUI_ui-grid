@@ -9,6 +9,7 @@ app.controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
     ],
     enableGridMenu: true,
     enableSelectAll: true,
+    exporterMenuLabel: 'ExportWJ',
     exporterCsvFilename: 'myFile.csv',
     exporterPdfDefaultStyle: {fontSize: 9},
     exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
