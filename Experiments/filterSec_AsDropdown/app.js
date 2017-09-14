@@ -1,9 +1,13 @@
-var app = angular.module('app', ['ngAnimate', 'ngTouch', 'ui.grid']);
+var app = angular.module('app', ['ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.columnsFilters']);
 
 app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
   var today = new Date();
   var nextWeek = new Date();
   nextWeek.setDate(nextWeek.getDate() + 7);
+  $scope.addToGender = function(){
+    $scope.gridApi.grid.options.data[0].gender = 3;
+    $scope.gridApi.grid.api.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+  }
 
   $scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
     if( col.filters[0].term ){
@@ -15,6 +19,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
 
   $scope.gridOptions = {
     enableFiltering: true,
+    enableGridMenu: true,
     onRegisterApi: function(gridApi){
       $scope.gridApi = gridApi;
     },
@@ -22,19 +27,36 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
       // default
       { field: 'name', headerCellClass: $scope.highlightFilteredHeader, width: 130 },
       // pre-populated search field
-      { field: 'gender', filter: {
+      { field: 'gender', 
+        columnFilter: {
+          multiple: true
+        },
+        filter: {
           term: '1',
           type: uiGridConstants.filter.SELECT,
           selectOptions: [ { value: '1', label: 'male' }, { value: '2', label: 'female' }, { value: '3', label: 'unknown'}, { value: '4', label: 'not stated' }, { value: '5', label: 'a really long value that extends things' } ]
         },
-        cellFilter: 'mapGender', headerCellClass: $scope.highlightFilteredHeader, width: 100 },
+        cellFilter: 'mapGender', headerCellClass: $scope.highlightFilteredHeader, width: 100 
+      },
+      { field: 'gender',
+        columnFilter: {
+          multiple: false
+        },
+        filter: {
+            term: '1',
+            type: uiGridConstants.filter.SELECT
+          },
+          cellFilter: 'mapGender', headerCellClass: $scope.highlightFilteredHeader, width: 100 
+      },
       // no filter input
-      { field: 'company', enableFiltering: false, filter: {
-        noTerm: true,
-        condition: function(searchTerm, cellValue) {
-          return cellValue.match(/a/);
-        }
-      }, width: 100},
+      { field: 'company', enableFiltering: false, 
+        filter: {
+          noTerm: true,
+          condition: function(searchTerm, cellValue) {
+            return cellValue.match(/a/);
+          }
+        }, width: 100
+      },
       // specifies one of the built-in conditions
       // and a placeholder for the input
       {
@@ -55,24 +77,29 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
         }, headerCellClass: $scope.highlightFilteredHeader, width: 150
       },
       // multiple filters
-      { field: 'age', filters: [
-        {
-          condition: uiGridConstants.filter.GREATER_THAN,
-          placeholder: 'greater than'
-        },
-        {
-          condition: uiGridConstants.filter.LESS_THAN,
-          placeholder: 'less than'
-        }
-      ], headerCellClass: $scope.highlightFilteredHeader, width: 80},
+      { field: 'age', 
+        columnFilter: {
+          type: 'number'
+        }, headerCellClass: $scope.highlightFilteredHeader, width: 80
+      },
       // date filter
-      { field: 'mixedDate', cellFilter: 'date', width: '15%', filter: {
+      { 
+        field: 'mixedDate', 
+        cellFilter: 'date', 
+        width: '15%', 
+        filter: {
+          type: 'date', 
           condition: uiGridConstants.filter.LESS_THAN,
           placeholder: 'less than',
           term: nextWeek
-        }, headerCellClass: $scope.highlightFilteredHeader
+        }, 
+        columnFilter: {
+          dateType: 'datetime-local'
+        },
+        headerCellClass: $scope.highlightFilteredHeader
       },
-      { field: 'mixedDate', displayName: "Long Date", cellFilter: 'date:"longDate"', filterCellFiltered:true, width: '15%',
+      { field: 'mixedDate', displayName: "Long Date", 
+        cellFilter: 'date:"longDate"', filterCellFiltered:true, width: '15%'
       }
     ]
   };
@@ -97,7 +124,8 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
 .filter('mapGender', function() {
   var genderHash = {
     1: 'male',
-    2: 'female'
+    2: 'female',
+    3: 'unknown'
   };
 
   return function(input) {
