@@ -15,6 +15,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
 
   $scope.gridOptions = {
     enableFiltering: true,
+    enableGridMenu: true,
     onRegisterApi: function(gridApi){
       $scope.gridApi = gridApi;
     },
