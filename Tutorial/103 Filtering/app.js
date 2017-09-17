@@ -40,6 +40,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
       // and a placeholder for the input
       {
         field: 'email',
+        enableFiltering: true,
         filter: {
           condition: uiGridConstants.filter.ENDS_WITH,
           placeholder: 'ends with'
@@ -81,7 +82,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridConstants', function ($sco
   $http.get('https://cdn.rawgit.com/angular-ui/ui-grid.info/gh-pages/data/500_complex.json')
     .success(function(data) {
       $scope.gridOptions.data = data;
-      $scope.gridOptions.data[0].age = -5;
+      $scope.gridOptions.data[0].age = 5;
 
       data.forEach( function addDates( row, index ){
         row.mixedDate = new Date();
