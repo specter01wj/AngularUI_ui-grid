@@ -12,7 +12,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$interval', 'uiGridTreeViewConst
       { name: 'company', width: '20%' },
       { name: 'state', width: '20%' },
       { name: 'balance', width: '15%', cellFilter: 'currency' }
-    ]/*,
+    ],
     onRegisterApi: function( gridApi ) {
       $scope.gridApi = gridApi;
       $scope.gridApi.treeBase.on.rowExpanded($scope, function(row) {
@@ -26,7 +26,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$interval', 'uiGridTreeViewConst
           }, 2000, 1);
         }
       });
-    }*/
+    }
   };
 
  $http.get('https://cdn.rawgit.com/angular-ui/ui-grid.info/gh-pages/data/500_complex.json')
